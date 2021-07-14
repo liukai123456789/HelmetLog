@@ -169,7 +169,7 @@ atc --model=${Home}/Models/helmet_head_person_s_1.7.0_op11_dbs.onnx --framework=
 
 ##### 1.E19010 
 
-![image-20210630083240461](.\华为昇腾智能-安全帽识别.assets\image-20210630083240461.png)
+![image-20210630083240461](https://github.com/liukai123456789/HelmetLog/blob/main/images/image-20210630083240461.jpg)
 
 
 
@@ -179,18 +179,18 @@ atc --model=${Home}/Models/helmet_head_person_s_1.7.0_op11_dbs.onnx --framework=
 
 ##### 2.E10016
 
-![image-20210630104846984](.\华为昇腾智能-安全帽识别.assets\image-20210630104846984.png)
+![image-20210630104846984](https://github.com/liukai123456789/HelmetLog/blob/main/images/image-20210630104846984.jpg)
 
 * 错误信息： Input parameter[--%s]'s opname[%s] is not exist in model 
 * 处理： env.sh中--input_shape="inputname:1,3,640,640" 名称要与入参算子名称相同，修改为images
 
 ##### 3.E19999
 
-![image-20210630111512259](.\华为昇腾智能-安全帽识别.assets\image-20210630111512259.png)
+![image-20210630111512259](https://github.com/liukai123456789/HelmetLog/blob/main/images/image-20210630111512259.jpg)
 
   命令行：atc -log=error
 
-  ![image-20210630141351906](.\华为昇腾智能-安全帽识别.assets\image-20210630141351906.png)
+  ![image-20210630141351906](https://github.com/liukai123456789/HelmetLog/blob/main/images/image-20210630141351906.jpg)
 
 处理：onnx模型中含有动态resize算子进行上采样，所以通过计算维度变化，改为静态算子。
 
@@ -202,7 +202,7 @@ python replace_resize.py helmet_head_person_s_1.7.0_op11.onnx
 
 ##### 4.W11001
 
-![image-20210701110903188](.\华为昇腾智能-安全帽识别.assets\image-20210701110903188.png)
+![image-20210701110903188](https://github.com/liukai123456789/HelmetLog/blob/main/images/image-20210701110903188.jpg)
 
 警告信息:High-priority service of op[%s] is invalid, low-priority service is used. It can work normally but may affect performance，在模型编译中无法选择高优先级引擎，使用低优先级引擎替代，不影响模型生成，可能对性能有影响。
 
@@ -260,13 +260,13 @@ python replace_resize.py helmet_head_person_s_1.7.0_op11.onnx
 
 **···**
 
-![AllObjectsStructuring 插件流程](%E5%8D%8E%E4%B8%BA%E6%98%87%E8%85%BE%E6%99%BA%E8%83%BD-%E5%AE%89%E5%85%A8%E5%B8%BD%E8%AF%86%E5%88%AB.assets/AllObjectsStructuring%20%E6%8F%92%E4%BB%B6%E6%B5%81%E7%A8%8B.png)
+![AllObjectsStructuring 插件流程](https://github.com/liukai123456789/HelmetLog/blob/main/images/AllObjectsStructuring%20%E6%8F%92%E4%BB%B6%E6%B5%81%E7%A8%8B.jpg)
 
 
 
 ### 2.安全帽识别插件流程
 
-<img src="%E5%8D%8E%E4%B8%BA%E6%98%87%E8%85%BE%E6%99%BA%E8%83%BD-%E5%AE%89%E5%85%A8%E5%B8%BD%E8%AF%86%E5%88%AB.assets/安全帽识别插件流程v3.png" alt="安全帽识别插件流程v3" style="zoom:75%;" />
+<img src="https://github.com/liukai123456789/HelmetLog/blob/main/images/%E5%AE%89%E5%85%A8%E5%B8%BD%E8%AF%86%E5%88%AB%E6%8F%92%E4%BB%B6%E6%B5%81%E7%A8%8Bv3.jpg" alt="安全帽识别插件流程v3" style="zoom:75%;" />
 
 
 
@@ -308,7 +308,7 @@ CreateMultipleStreams ：此接口根据指定的配置文件创建多个Stream�
 
 GetProtobuf：本套接口没有使用appsrc，而是使用视频取流元件mxpi_rtspsrc，因此不需要通过SendProtobuf发送数据，输出结果仅用GetProtobuf获取。元件处理完数据后，以元件名为key将处理结果保存至元数据中，最后通过GetProtobuf接口从元数据中取出想要获取的元件结果，输入一组key，便能获取key对应的protobuf数据。
 
-![接口调用流程](%E5%8D%8E%E4%B8%BA%E6%98%87%E8%85%BE%E6%99%BA%E8%83%BD-%E5%AE%89%E5%85%A8%E5%B8%BD%E8%AF%86%E5%88%AB.assets/%E6%8E%A5%E5%8F%A3%E8%B0%83%E7%94%A8%E6%B5%81%E7%A8%8B.png)
+![接口调用流程](https://github.com/liukai123456789/HelmetLog/blob/main/images/%E6%8E%A5%E5%8F%A3%E8%B0%83%E7%94%A8%E6%B5%81%E7%A8%8B.jpg)
 
 
 
@@ -318,7 +318,7 @@ GetProtobuf：本套接口没有使用appsrc，而是使用视频取流元件mxp
 
 已知resize算子属于动态算子，atc模型转换不支持，会导致系统报错E19999，需要将算子的size属性用scales属性代替。通过 **https://convertmodel.com/** 可以将onnx文件的详细信息显示，可以得知scales的值为[1,1,2,2]
 
-![image-20210707203326392](%E5%8D%8E%E4%B8%BA%E6%98%87%E8%85%BE%E6%99%BA%E8%83%BD-%E5%AE%89%E5%85%A8%E5%B8%BD%E8%AF%86%E5%88%AB.assets/image-20210707203326392.png)
+![image-20210707203326392](https://github.com/liukai123456789/HelmetLog/blob/main/images/image-20210707203326392.jpg)
 
 #### 2.onnx模型简化
 
@@ -344,11 +344,11 @@ GetProtobuf：本套接口没有使用appsrc，而是使用视频取流元件mxp
 
 修改前：
 
-![image-20210708110432746](%E5%8D%8E%E4%B8%BA%E6%98%87%E8%85%BE%E6%99%BA%E8%83%BD-%E5%AE%89%E5%85%A8%E5%B8%BD%E8%AF%86%E5%88%AB.assets/image-20210708110432746.png)
+![image-20210708110432746](https://github.com/liukai123456789/HelmetLog/blob/main/images/image-20210708110432746.jpg)
 
 修改后：
 
-![image-20210708110338510](%E5%8D%8E%E4%B8%BA%E6%98%87%E8%85%BE%E6%99%BA%E8%83%BD-%E5%AE%89%E5%85%A8%E5%B8%BD%E8%AF%86%E5%88%AB.assets/image-20210708110338510.png)
+![image-20210708110338510](https://github.com/liukai123456789/HelmetLog/blob/main/images/image-20210708110338510.jpg)
 
 
 
@@ -430,7 +430,7 @@ Ascend-cann-benchmark_20.3.0-Linux-aarch64.zip  解压至服务器/home/sd_xiong
 
 ERROR：账号没有root权限，显示缺少so文件，切换至root账号。
 
-测试成功：![image-20210709193732310](%E5%8D%8E%E4%B8%BA%E6%98%87%E8%85%BE%E6%99%BA%E8%83%BD-%E5%AE%89%E5%85%A8%E5%B8%BD%E8%AF%86%E5%88%AB.assets/image-20210709193732310.png)
+测试成功：![image-20210709193732310](https://github.com/liukai123456789/HelmetLog/blob/main/images/image-20210709193732310.jpg)
 
 参数说明：
 
@@ -464,7 +464,7 @@ ave_latency： 模型执行的平均时间。单位为ms
 
 *运行命令：python3.7.5 yolo_tf_preprocess.py --src_info ./coco2017.info --save_path ./input_bin*
 
-*运行成功：![image-20210710100044911](%E5%8D%8E%E4%B8%BA%E6%98%87%E8%85%BE%E6%99%BA%E8%83%BD-%E5%AE%89%E5%85%A8%E5%B8%BD%E8%AF%86%E5%88%AB.assets/image-20210710100044911.png)*
+*运行成功：![image-20210710100044911](https://github.com/liukai123456789/HelmetLog/blob/main/images/image-20210710100044911.jpg)*
 
 
 
@@ -490,7 +490,7 @@ ave_latency： 模型执行的平均时间。单位为ms
 
 error:
 
-![image-20210710151853941](%E5%8D%8E%E4%B8%BA%E6%98%87%E8%85%BE%E6%99%BA%E8%83%BD-%E5%AE%89%E5%85%A8%E5%B8%BD%E8%AF%86%E5%88%AB.assets/image-20210710151853941.png)
+![image-20210710151853941](https://github.com/liukai123456789/HelmetLog/blob/main/images/image-20210710151853941.jpg)
 
  处理：**input_text_path输入为二进制文件，而模型的输入为图片，所以修改为使用input_imgFiles_path参数，直接输入图片，不在使用数据集文件，且使用DVpp=true**。使用数据图片：    /home/sd_xiong2/ExampleProject/HelmetIdentification/benchmark_tools/test_imgFiles
 
@@ -498,7 +498,7 @@ error:
 
 运行成功:
 
- ![image-20210710170200571](%E5%8D%8E%E4%B8%BA%E6%98%87%E8%85%BE%E6%99%BA%E8%83%BD-%E5%AE%89%E5%85%A8%E5%B8%BD%E8%AF%86%E5%88%AB.assets/image-20210710170200571.png)                            
+ ![image-20210710170200571](https://github.com/liukai123456789/HelmetLog/blob/main/images/image-20210710170200571.jpg)                            
 
 输出参数说明：
 
@@ -709,7 +709,7 @@ make -j
 
 #### 3.ERROR
 
-**error1**：![image-20210713170424169](%E5%8D%8E%E4%B8%BA%E6%98%87%E8%85%BE%E6%99%BA%E8%83%BD-%E5%AE%89%E5%85%A8%E5%B8%BD%E8%AF%86%E5%88%AB.assets/image-20210713170424169.png)
+**error1**：![image-20210713170424169](https://github.com/liukai123456789/HelmetLog/blob/main/images/image-20210713170424169.jpg)
 
 处理：添加环境变量
 
@@ -729,7 +729,7 @@ link_directories(/home/sd_xiong2/MindX_SDK/mxVision/opensource/lib)
 
 
 
-**error2**：![image-20210713211321067](%E5%8D%8E%E4%B8%BA%E6%98%87%E8%85%BE%E6%99%BA%E8%83%BD-%E5%AE%89%E5%85%A8%E5%B8%BD%E8%AF%86%E5%88%AB.assets/image-20210713211321067.png)
+**error2**：![image-20210713211321067](https://github.com/liukai123456789/HelmetLog/blob/main/images/image-20210713211321067.jpg)
 
 处理：CMakeLists中代码的顺序问题，改为样例中的顺序运行成功
 
