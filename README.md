@@ -4,7 +4,7 @@
 
 ## 一.样例使用日志
 
-1.Image decode failed![image-20210628101536174](.\华为昇腾智能-安全帽识别.assets\image-20210628101536174.png)
+1.Image decode failed![image-20210628101536174](https://github.com/liukai123456789/HelmetLog/blob/main/images/image-20210628101536174.jpg)
 
 
 ## 二.模型转换（2021.6.28-2021.7.3）
