@@ -888,7 +888,7 @@ echo "successfully!!"
 
 报错： undefined symbol: _ZN6google10LogMessage9SendToLogEv
 
-处理：在编译插件CMakeLists.txt添加如下编译参数 set(PLUGIN_NAME "mxpi_selectedframe")
+处理：在编译插件CMakeLists.txt添加如下编译参数 add_definitions(-Dgoogle=mindxsdk_private)
 
 
 
