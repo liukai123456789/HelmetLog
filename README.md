@@ -851,7 +851,7 @@ source /home/sd_xiong2/ExampleProject/HelmetIdentification/Models/main-env.sh
 
 
 
-![image-20210717141906198](%E5%8D%8E%E4%B8%BA%E6%98%87%E8%85%BE%E6%99%BA%E8%83%BD-%E5%AE%89%E5%85%A8%E5%B8%BD%E8%AF%86%E5%88%AB.assets/image-20210717141906198.png)
+![image-20210717141906198](https://github.com/liukai123456789/HelmetLog/blob/main/images/image-20210717141906198.jpg)
 
 处理：环境变量设置问题
 
@@ -900,13 +900,13 @@ echo "successfully!!"
 
 ##### error4.
 
-![image-20210717162923226](%E5%8D%8E%E4%B8%BA%E6%98%87%E8%85%BE%E6%99%BA%E8%83%BD-%E5%AE%89%E5%85%A8%E5%B8%BD%E8%AF%86%E5%88%AB.assets/image-20210717162923226.png)
+![image-20210717162923226](https://github.com/liukai123456789/HelmetLog/blob/main/images/image-20210717162923226.jpg)
 
 处理：将插件mxpi_motsimplesortV2修改为mxpi_motsimplesort
 
 ##### error5.
 
-![image-20210717200635763](%E5%8D%8E%E4%B8%BA%E6%98%87%E8%85%BE%E6%99%BA%E8%83%BD-%E5%AE%89%E5%85%A8%E5%B8%BD%E8%AF%86%E5%88%AB.assets/image-20210717200635763.png)
+![image-20210717200635763](https://github.com/liukai123456789/HelmetLog/blob/main/images/image-20210717200635763.jpg)
 
 
 
