@@ -766,7 +766,147 @@ install(TARGETS ${TARGET_LIBRARY} LIBRARY DESTINATION ${PROJECT_SOURCE_DIR}/dist
 
 编译成功，产生**libmxpi_selectedframe.so**文件存放在/home/sd_xiong2/ExampleProject/HelmetIdentification/plugins/MxpiSelectedFrame/build，将文件copy至SDK的插件库中。
 
+### 4.后处理文件xxx.so
 
+sdk中已经包含有YOLOv5的后处理文件：libMpYOLOv5PostProcessor.so
+
+参数配置为：
+
+| 参数名            | 描述                                                         | 设置参数值                                                   |
+| ----------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| CLASS_NUM         | 类别数量                                                     | 3                                                            |
+| BIASES_NUM        | anchor宽高的数量（18表 示9个anchor，每个对应 一对宽高值）。  | 18                                                           |
+| BIASE             | 每两个数组成一个anchor 的宽高值，例如10、13表 示第一个anchor的宽、高 值。 | 10，13，16，30，33， 23，30，61，62，45， 59，119，116，90， 156，198，373，326 |
+| SCORE_THRESH      | 目标是否为某种类别物体 的阈值，大于阈值即认为 是该目标。     | 0.4                                                          |
+| OBJECTNESS_THRESH | 是否为目标的阈值，大于 阈值即认为是目标。                    | 0.6                                                          |
+| IOU_THRESH        | 两个框的IOU阈值，超过 阈值即认为同一个框。                   | 0.5                                                          |
+| YOLO_TYPE         | 表示输出tensor的个数，3 表示有三个feature map 输出。         | 3                                                            |
+| ANCHOR_DIM        | 每个feature map对应的 anchor框数量。                         | 3                                                            |
+| MODEL_TYPE        | 数据排布格式，0表示 NHWC，1表示NCHW。                        | 1                                                            |
+
+
+
+
+
+### 5.搭建一个简单地推流服务器
+
+1.下载VLC media player：[VLC media player for Windows](https://www.videolan.org/vlc/download-windows.html)
+
+在 媒体/流 中将添加本地视频 生成rstp流。流地址为rtsp://10.10.11.201:8554/
+
+选择另外客户端 添加流地址。在服务端点击【流】即可直播。
+
+
+
+### 6.调用主文件
+
+#### 1.主文件
+
+```python
+from StreamManagerApi import *
+
+if __name__ == '__main__':
+    # init stream manager
+    streamManagerApi = StreamManagerApi()
+    ret = streamManagerApi.InitManager()
+    if ret != 0:
+        print("Failed to init Stream manager, ret=%s" % str(ret))
+        exit()
+
+    # create streams by pipeline config file
+    with open("/home/sd_xiong2/ExampleProject/HelmetIdentification/Models/HelmetDetection.pipline", 'rb') as f:
+        pipelineStr = f.read()
+    ret = streamManagerApi.CreateMultipleStreams(pipelineStr)
+    if ret != 0:
+        print("Failed to create Stream, ret=%s" % str(ret))
+        exit()
+
+    # Obtain the inference result by specifying streamName and uniqueId.
+    streamName = b'Detection'
+    for i in range(2):
+      inferResult[i] = streamManagerApi.GetResult(streamName, i, 3000)
+      if inferResult[i].errorCode != 0:
+          print("GetResultWithUniqueId error. errorCode=%d, errorMsg=%s" % (
+            inferResult[i].errorCode, inferResult[i].data.decode()))
+          exit()
+      print(inferResult.data.decode())  # print the infer result
+
+    # destroy streams
+    streamManagerApi.DestroyAllStreams()
+```
+
+#### 2.运行
+
+source /home/sd_xiong2/.bashrc
+
+source /home/sd_xiong2/ExampleProject/HelmetIdentification/Models/main-env.sh
+
+ python3.7.5 main.py
+
+
+
+#### 3.ERROR
+
+##### error1.
+
+
+
+![image-20210717141906198](%E5%8D%8E%E4%B8%BA%E6%98%87%E8%85%BE%E6%99%BA%E8%83%BD-%E5%AE%89%E5%85%A8%E5%B8%BD%E8%AF%86%E5%88%AB.assets/image-20210717141906198.png)
+
+处理：环境变量设置问题
+
+①.bashrc 文件中设置如下：
+
+```c++
+export MX_SDK_HOME=/home/sd_xiong2/MindX_SDK/mxVision
+export install_path=/usr/local/Ascend/ascend-toolkit/latest
+export LD_LIBRARY_PATH="${MX_SDK_HOME}/lib:${MX_SDK_HOME}/opensource/lib:${MX_SDK_HOME}/opensource/lib64:${install_path}/acllib/lib64:/usr/local/Ascend/ascend-toolkit:${install_path}/arm64-linux/atc/lib64:/usr/local/Ascend/driver/lib64:${MX_SDK_HOME}/python:${LD_LIBRARY_PATH}"
+export PYTHONPATH="${install_path}/atc/python/site-packages:${install_path}/atc/python/site-packages/auto_tune.egg/auto_tune:${install_path}/atc/python/site-packages/schedule_search.egg:${MX_SDK_HOME}/python:${PYTHONPATH}"
+export PATH="/usr/local/python3.7.5/bin:${install_path}/arm64-linux/atc/ccec_compiler/bin:${install_path}/arm64-linux/atc/bin:${install_path}/atc/bin:${MX_SDK_HOME}/python:$PATH"
+```
+
+②main-env.sh中设置如下：
+
+```c++
+export MX_SDK_HOME=/home/sd_xiong2/MindX_SDK/mxVision
+export install_path=/usr/local/Ascend/ascend-toolkit/latest
+export PATH=/usr/local/python3.7.5/bin:${install_path}/arm64-linux/atc/ccec_compiler/bin:${install_path}/arm64-linux/atc/bin:${install_path}/atc/bin:$PATH
+export PYTHONPATH=${install_path}/atc/python/site-packages:${install_path}/atc/python/site-packages/auto_tune.egg/auto_tune:${install_path}/atc/python/site-packages/schedule_search.egg:/usr/local/python3.7.5/bin:/usr/local/lib/python3.7/dist-packages:${PYTHONPATH}
+export LD_LIBRARY_PATH=${MX_SDK_HOME}/lib:${MX_SDK_HOME}/opensource/lib:${MX_SDK_HOME}/opensource/lib64:${install_path}/acllib/lib64:/usr/local/Ascend/driver/lib64:${install_path}/arm64-linux/atc/lib64:${install_path}/acllib_linux.arm64/lib64:${MX_SDK_HOME}/include:${MX_SDK_HOME}/python${LD_LIBRARY_PATH}
+
+
+export GST_PLUGIN_SCANNER=${MX_SDK_HOME}/opensource/libexec/gstreamer-1.0/gst-plugin-scanner
+export GST_PLUGIN_PATH=${MX_SDK_HOME}/opensource/lib/gstreamer-1.0:${MX_SDK_HOME}/lib/plugins
+export ASCEND_OPP_PATH=${install_path}/opp
+export GST_DEBUG=3
+echo "successfully!!"
+```
+
+
+
+##### error2.
+
+报错： undefined symbol: _ZN6google10LogMessage9SendToLogEv
+
+处理：在编译插件CMakeLists.txt添加如下编译参数 set(PLUGIN_NAME "mxpi_selectedframe")
+
+
+
+##### error3.
+
+[6005] [stream invaldid config]  Invalid stream config. Parse json value of stream failed. Error message: (* Line 46, Column 13 Syntax error: Malformed object literal). Failed to create Stream, ret=6005
+
+处理： 语法格式错误。
+
+##### error4.
+
+![image-20210717162923226](%E5%8D%8E%E4%B8%BA%E6%98%87%E8%85%BE%E6%99%BA%E8%83%BD-%E5%AE%89%E5%85%A8%E5%B8%BD%E8%AF%86%E5%88%AB.assets/image-20210717162923226.png)
+
+处理：将插件mxpi_motsimplesortV2修改为mxpi_motsimplesort
+
+##### error5.
+
+![image-20210717200635763](%E5%8D%8E%E4%B8%BA%E6%98%87%E8%85%BE%E6%99%BA%E8%83%BD-%E5%AE%89%E5%85%A8%E5%B8%BD%E8%AF%86%E5%88%AB.assets/image-20210717200635763.png)
 
 
 
